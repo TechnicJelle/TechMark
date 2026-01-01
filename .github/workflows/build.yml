@@ -12,7 +12,7 @@ jobs:
         target: [ Windows ]
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           submodules: recursive
       - name: Configure
@@ -20,7 +20,7 @@ jobs:
       - name: Build
         run: cmake --build build --target sdl-min --config Release
       - name: Upload Build
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         if: ${{ matrix.target != 'WindowsStore' }}
         with:
           name: sdl-min-${{ matrix.target }}-${{ matrix.arch }}
@@ -35,7 +35,7 @@ jobs:
     name: Build for Linux
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           submodules: recursive
       - name: Install Dependencies
@@ -54,7 +54,7 @@ jobs:
       - name: Build
         run: cmake --build build --target sdl-min --config Release
       - name: Upload Build
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: sdl-min-Linux
           path: |
@@ -73,7 +73,7 @@ jobs:
         target: [ iOS, visionOS, '' ]
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           submodules: recursive
       - name: Setup Xcode version
@@ -91,7 +91,7 @@ jobs:
           cd build
           hdiutil create -size 2g -srcfolder release -volname sdl_min_apple_${{ matrix.target }} sdl_min_apple_${{ matrix.target }}.dmg
       - name: Upload Build
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: sdl-min-apple-${{ matrix.target }}
           path: build/*.dmg
@@ -101,10 +101,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           submodules: recursive
-      - uses: actions/setup-java@v4
+      - uses: actions/setup-java@v5
         with:
           distribution: 'temurin'
           java-version: '17'
@@ -116,7 +116,7 @@ jobs:
           cd SDL/android-project/
           ./gradlew assembleDebug
       - name: Upload the APK
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: sdl-min-Android
           path: SDL/android-project/app/build/outputs/apk/debug/app-debug.apk
