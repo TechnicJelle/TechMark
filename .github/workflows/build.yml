@@ -18,12 +18,12 @@ jobs:
       - name: Configure
         run: cmake -DCMAKE_SYSTEM_NAME=${{ matrix.target }} -DCMAKE_SYSTEM_VERSION="10.0" -A${{ matrix.arch }} -S . -B build
       - name: Build
-        run: cmake --build build --target sdl-min --config Release
+        run: cmake --build build --target TechMark --config Release
       - name: Upload Build
         uses: actions/upload-artifact@v6
         if: ${{ matrix.target != 'WindowsStore' }}
         with:
-          name: sdl-min-${{ matrix.target }}-${{ matrix.arch }}
+          name: TechMark-${{ matrix.target }}-${{ matrix.arch }}
           path: |
             build/Release/*.exe
             build/Release/*.dll
@@ -52,13 +52,13 @@ jobs:
       - name: Configure
         run: cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -S . -B build
       - name: Build
-        run: cmake --build build --target sdl-min --config Release
+        run: cmake --build build --target TechMark --config Release
       - name: Upload Build
         uses: actions/upload-artifact@v6
         with:
-          name: sdl-min-Linux
+          name: TechMark-Linux
           path: |
-            build/Release/sdl-min
+            build/Release/TechMark
             build/Release/*.so
             build/Release/*.ttf
             build/Release/*.ogg
@@ -85,15 +85,15 @@ jobs:
       - name: Build
         run: cmake --build build --target install --config Release
       - name: Ad-Hoc Codesign
-        run: codesign -s - -f "./build/release/sdl-min.app" --deep
+        run: codesign -s - -f "./build/release/TechMark.app" --deep
       - name: Create DMG
         run: |
           cd build
-          hdiutil create -size 2g -srcfolder release -volname sdl_min_apple_${{ matrix.target }} sdl_min_apple_${{ matrix.target }}.dmg
+          hdiutil create -size 2g -srcfolder release -volname TechMark_apple_${{ matrix.target }} TechMark_apple_${{ matrix.target }}.dmg
       - name: Upload Build
         uses: actions/upload-artifact@v6
         with:
-          name: sdl-min-apple-${{ matrix.target }}
+          name: TechMark-apple-${{ matrix.target }}
           path: build/*.dmg
 
   build-android:
@@ -118,5 +118,5 @@ jobs:
       - name: Upload the APK
         uses: actions/upload-artifact@v6
         with:
-          name: sdl-min-Android
+          name: TechMark-Android
           path: SDL/android-project/app/build/outputs/apk/debug/app-debug.apk
