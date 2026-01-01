@@ -18,6 +18,7 @@ You can also use an init script inside [`config/`](config/). Then open the IDE p
 
 ## Supported Platforms
 I have tested the following:
+
 | Platform | Architecture | Generator |
 | --- | --- | --- |
 | macOS | x86_64, arm64 | Xcode |
