@@ -1,9 +1,9 @@
 [submodule "SDL"]
-	path = SDL
+	path = vendored/SDL
 	url = https://github.com/libsdl-org/SDL
 [submodule "SDL_ttf"]
-	path = SDL_ttf
+	path = vendored/SDL_ttf
 	url = https://github.com/libsdl-org/SDL_ttf
 [submodule "SDL_image"]
-	path = SDL_image
+	path = vendored/SDL_image
 	url = https://github.com/libsdl-org/SDL_image
