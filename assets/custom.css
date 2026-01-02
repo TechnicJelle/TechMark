@@ -1,0 +1,112 @@
+hr {
+	border-color: black;
+}
+
+a {
+	color: #0000FF;
+	text-decoration: underline;
+}
+
+a:hover {
+	color: #FF0000;
+	text-decoration: none;
+	cursor: pointer;
+}
+
+button {
+	color: #FFF;
+	background-color: #555;
+	padding: 0.5em 1em;
+	border-radius: 4px;
+}
+
+button:hover {
+	background-color: #777;
+}
+
+img {
+	max-width: 100%;
+	height: auto;
+}
+
+[align="center"] {
+	text-align: center;
+}
+
+pre {
+	font-family: "JetBrains Mono";
+	background-color: #AAA;
+	padding: 0.5em 0.8em;
+	border-radius: 4px;
+	margin: 1.12em 0;
+}
+
+del {
+	text-decoration: line-through;
+}
+
+li {
+	display: block;
+	margin-left: 1em;
+}
+
+blockquote {
+	display: block;
+	padding-left: 1em;
+	border-left: 4px #555;
+	margin: 1.12em 0;
+}
+
+blockquote p {
+	display: inline;
+}
+
+/* Scrollbar Shared Styles */
+scrollbarvertical,
+scrollbarhorizontal {
+	cursor: arrow;
+}
+
+scrollbarvertical slidertrack,
+scrollbarhorizontal slidertrack {
+	background: #eee;
+}
+
+scrollbarvertical slidertrack:active,
+scrollbarhorizontal slidertrack:active {
+	background: #ddd;
+}
+
+scrollbarvertical sliderbar,
+scrollbarhorizontal sliderbar {
+	background: #aaa;
+}
+
+scrollbarvertical sliderbar:hover,
+scrollbarhorizontal sliderbar:hover {
+	background: #888;
+}
+
+scrollbarvertical sliderbar:active,
+scrollbarhorizontal sliderbar:active {
+	background: #666;
+}
+
+/* Scrollbar Sizes */
+scrollbarvertical {
+	width: 15px;
+}
+
+scrollbarhorizontal {
+	height: 15px;
+}
+
+scrollbarhorizontal sliderbar {
+	width: 15px;
+	min-height: 30px;
+}
+
+scrollbarhorizontal sliderbar {
+	height: 15px;
+	min-width: 30px;
+}

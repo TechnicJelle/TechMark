@@ -40,6 +40,9 @@ endif ()
 target_sources(${EXECUTABLE_NAME}
 		PRIVATE
 		src/main.cpp
+		src/App.cpp
+		src/ClickListener.cpp
+		src/TextEditListener.cpp
 		src/iosLaunchScreen.storyboard
 )
 # What is iosLaunchScreen.storyboard? This file describes what Apple's mobile platforms
@@ -79,12 +82,40 @@ set(SDLIMAGE_JPEG OFF)
 set(SDLIMAGE_WEBP OFF)
 add_subdirectory(vendored/SDL_image EXCLUDE_FROM_ALL)
 
+# RmlUi
+add_subdirectory(vendored/RmlUi EXCLUDE_FROM_ALL)
+
+# md4c
+add_subdirectory(vendored/md4c/src EXCLUDE_FROM_ALL)
+
 # Link SDL to our executable. This also makes its include directory available to us. 
 target_link_libraries(${EXECUTABLE_NAME} PUBLIC
 		SDL3_ttf::SDL3_ttf
 		SDL3_image::SDL3_image
-		SDL3::SDL3 # If using satelite libraries, SDL must be the last item in the list.
+		SDL3::SDL3 # If using satellite libraries, SDL must be the last item in the list.
 )
+
+# RmlUI
+set(RMLUI_BACKEND_PATH ${RmlUi_SOURCE_DIR}/Backends)
+add_library(rmlui_backend_SDL_Renderer INTERFACE)
+target_sources(rmlui_backend_SDL_Renderer INTERFACE
+		${RMLUI_BACKEND_PATH}/RmlUi_Platform_SDL.cpp
+		${RMLUI_BACKEND_PATH}/RmlUi_Renderer_SDL.cpp
+)
+target_include_directories(rmlui_backend_SDL_Renderer INTERFACE ${RMLUI_BACKEND_PATH})
+target_compile_definitions(rmlui_backend_SDL_Renderer INTERFACE
+		RMLUI_SDL_VERSION_MAJOR=3
+)
+target_link_libraries(${EXECUTABLE_NAME} PRIVATE
+		RmlUi::RmlUi
+		rmlui_backend_SDL_Renderer
+		RmlUi::Debugger
+)
+
+## MD4C
+target_link_libraries(${EXECUTABLE_NAME} PRIVATE md4c)
+target_link_libraries(${EXECUTABLE_NAME} PRIVATE md4c-html)
+target_include_directories(${EXECUTABLE_NAME} PRIVATE vendored/md4c/src)
 
 # SDL_Image bug: https://github.com/libsdl-org/SDL_image/issues/506
 if (APPLE AND NOT BUILD_SHARED_LIBS)
@@ -108,14 +139,22 @@ if (APPLE)
 		target_sources(${EXECUTABLE_NAME} PRIVATE ${FILE})
 		set_property(SOURCE ${FILE} PROPERTY MACOSX_PACKAGE_LOCATION "Resources/${relpath}")
 	endmacro()
-	add_resource("${CMAKE_CURRENT_LIST_DIR}/src/Inter-VariableFont.ttf")
-	add_resource("${CMAKE_CURRENT_LIST_DIR}/src/gs_tiger.svg")
+	add_resource("${CMAKE_CURRENT_LIST_DIR}/assets/app.css")
+	add_resource("${CMAKE_CURRENT_LIST_DIR}/assets/custom.css")
+	add_resource("${CMAKE_CURRENT_LIST_DIR}/assets/default.css")
+	add_resource("${CMAKE_CURRENT_LIST_DIR}/assets/ui.html")
+	add_resource("${CMAKE_CURRENT_LIST_DIR}/assets/fonts/Roboto_v3.011/Roboto-Regular.ttf")
+	add_resource("${CMAKE_CURRENT_LIST_DIR}/assets/fonts/JetBrainsMono-2.304/JetBrainsMono-Regular.ttf")
 elseif (EMSCRIPTEN)
 	# on the web, we have to put the files inside of the webassembly
 	# somewhat unintuitively, this is done via a linker argument.
 	target_link_libraries(${EXECUTABLE_NAME} PRIVATE
-			"--preload-file \"${CMAKE_CURRENT_LIST_DIR}/src/Inter-VariableFont.ttf@/\""
-			"--preload-file \"${CMAKE_CURRENT_LIST_DIR}/src/gs_tiger.svg@/\""
+			"--preload-file \"${CMAKE_CURRENT_LIST_DIR}/assets/app.css@/\""
+			"--preload-file \"${CMAKE_CURRENT_LIST_DIR}/assets/custom.css@/\""
+			"--preload-file \"${CMAKE_CURRENT_LIST_DIR}/assets/default.css@/\""
+			"--preload-file \"${CMAKE_CURRENT_LIST_DIR}/assets/ui.html@/\""
+			"--preload-file \"${CMAKE_CURRENT_LIST_DIR}/assets/fonts/Roboto_v3.011/Roboto-Regular.ttf@/\""
+			"--preload-file \"${CMAKE_CURRENT_LIST_DIR}/assets/fonts/JetBrainsMono-2.304/JetBrainsMono-Regular.ttf@/\""
 	)
 else ()
 	if (ANDROID)
@@ -130,18 +169,22 @@ else ()
 		if (ANDROID)
 			# MOBILE_ASSETS_DIR is set in the gradle file via the cmake command line and points to the Android Studio Assets folder.
 			# when we copy assets there, the Android build pipeline knows to add them to the apk.
-			set(outname "${MOBILE_ASSETS_DIR}/${filename}")
+			set(outname "${MOBILE_ASSETS_DIR}/assets/${filename}")
 		else ()
 			# for platforms that do not have a good packaging format, all we can do is copy the assets to the process working directory.
-			set(outname "${CMAKE_BINARY_DIR}/$<CONFIGURATION>/${filename}")
+			set(outname "${CMAKE_BINARY_DIR}/$<CONFIGURATION>/assets/${filename}")
 		endif ()
 		add_custom_command(POST_BUILD
 				TARGET "${EXECUTABLE_NAME}"
-				COMMAND ${CMAKE_COMMAND} -E copy_if_different "${CMAKE_CURRENT_LIST_DIR}/src/${filename}" "${outname}"
+				COMMAND ${CMAKE_COMMAND} -E copy_if_different "${CMAKE_CURRENT_LIST_DIR}/assets/${filename}" "${outname}"
 		)
 	endmacro()
-	copy_helper("Inter-VariableFont.ttf")
-	copy_helper("gs_tiger.svg")
+	copy_helper("app.css")
+	copy_helper("custom.css")
+	copy_helper("default.css")
+	copy_helper("ui.html")
+	copy_helper("fonts/Roboto_v3.011/Roboto-Regular.ttf")
+	copy_helper("fonts/JetBrainsMono-2.304/JetBrainsMono-Regular.ttf")
 endif ()
 
 # set some extra configs for each platform

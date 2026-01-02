@@ -7,3 +7,9 @@
 [submodule "SDL_image"]
 	path = vendored/SDL_image
 	url = https://github.com/libsdl-org/SDL_image
+[submodule "vendored/RmlUi"]
+	path = vendored/RmlUi
+	url = https://github.com/mikke89/RmlUi.git
+[submodule "vendored/md4c"]
+	path = vendored/md4c
+	url = https://github.com/mity/md4c.git
