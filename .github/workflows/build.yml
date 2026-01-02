@@ -27,9 +27,7 @@ jobs:
           path: |
             build/Release/*.exe
             build/Release/*.dll
-            build/Release/*.ttf
-            build/Release/*.ogg
-            build/Release/*.svg
+            build/Release/assets/
 
   build-linux:
     name: Build for Linux
@@ -59,10 +57,8 @@ jobs:
           name: TechMark-Linux
           path: |
             build/Release/TechMark
-            build/Release/*.so
-            build/Release/*.ttf
-            build/Release/*.ogg
-            build/Release/*.svg
+            build/Release/*.so*
+            build/Release/assets/
 
   build-apple:
     name: Build for Apple
