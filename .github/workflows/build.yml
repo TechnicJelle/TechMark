@@ -1,8 +1,8 @@
-name: Build Sample
+name: Build
 on: [ push, pull_request ]
 
 jobs:
-  build-win:
+  build-windows:
     name: Build for Windows
     runs-on: windows-latest
     strategy:
@@ -64,7 +64,7 @@ jobs:
             build/Release/*.ogg
             build/Release/*.svg
 
-  build-mac:
+  build-apple:
     name: Build for Apple
     runs-on: macos-14
     strategy:
